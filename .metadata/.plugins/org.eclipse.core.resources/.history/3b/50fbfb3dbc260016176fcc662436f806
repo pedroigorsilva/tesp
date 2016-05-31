@@ -1,0 +1,148 @@
+package br.unibh.seguros.entidades;
+
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+
+@Entity
+@Table(name="tb_proponente")@PrimaryKeyJoinColumn
+@NamedQueries({@NamedQuery(name="Proponente.findByName", query = "select o from Proponente o where o.matricula like :nome")})
+public class Proponente extends PessoaFisica implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+			
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((dataCadastro == null) ? 0 : dataCadastro.hashCode());
+		result = prime * result + ((matricula == null) ? 0 : matricula.hashCode());
+		result = prime * result + ((situacaoCadastro == null) ? 0 : situacaoCadastro.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		return result;
+	}
+	
+	public Proponente(String nome, String cpf, String telefoneComercial, String telefoneResidencial,
+			String telefoneCelular, String email, Integer idade, Date data_nascimento, String matricula,
+			Date data_cadastro, String situacaoCadastro, String status) {
+		super(nome, cpf, telefoneComercial, telefoneResidencial, telefoneCelular, email, idade, data_nascimento);
+		this.matricula = matricula;
+		this.dataCadastro = data_cadastro;
+		this.situacaoCadastro = situacaoCadastro;
+		this.status = status;
+	}
+	
+	public Proponente(String nome, String cpf, String telefoneComercial, String telefoneResidencial,
+			String telefoneCelular, String email, Integer idade, Date data_nascimento, String matricula,
+			Date data_cadastro, String situacaoCadastro, String status, Collection<Endereco> enderecos,
+			Collection<Dependente> dependente, Collection<Vinculo> vinculos, Collection<Seguro> seguros,
+			Collection<Proposta> propostas) {
+		super(nome, cpf, telefoneComercial, telefoneResidencial, telefoneCelular, email, idade, data_nascimento);
+		this.matricula = matricula;
+		this.dataCadastro = data_cadastro;
+		this.situacaoCadastro = situacaoCadastro;
+		this.status = status;
+		this.enderecos = enderecos;
+		this.dependentes = dependente;
+		this.vinculos = vinculos;
+		this.proposta = propostas;
+	}
+	@NotBlank
+	@Pattern(regexp = "[0-9]*")
+	@Size(min=5, max=8)
+	@Column (columnDefinition="CHAR(8)", nullable=false,unique=true)
+	private String matricula;
+	
+	@Column(name="data_cadastro", nullable=false)
+	@Temporal(TemporalType.DATE)
+	private Date dataCadastro;
+	
+	@NotBlank
+	@Pattern(regexp = "[A-zÀ-ú ]*")
+	@Size(max=30)
+	@Column (name="situacao_cadastro", nullable=false,length=30)
+	private String situacaoCadastro;
+	
+	@NotBlank
+	@Pattern(regexp = "[A-zÀ-ú ]*")
+	@Size(max=30)
+	@Column (nullable=false,length=30)
+	private String status;
+	
+	@OneToMany(mappedBy="proponente",fetch=FetchType.LAZY)
+	private Collection<Endereco> enderecos;
+	
+	@OneToMany(mappedBy="proponente",fetch=FetchType.LAZY)
+	private Collection<Dependente> dependentes;
+	
+	@OneToMany(mappedBy="proponente",fetch=FetchType.LAZY)
+	private Collection<Vinculo> vinculos;
+	
+	@OneToMany(mappedBy="proponente", fetch=FetchType.LAZY)
+	private Collection<Proposta> proposta;
+	
+	public Date getDataCadastro() {
+		return dataCadastro;
+	}
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
+	}
+	public String getMatricula() {
+		return matricula;
+	}
+	public void setMatricula(String matricula) {
+		this.matricula = matricula;
+	}
+	public String getSituacaoCadastro() {
+		return situacaoCadastro;
+	}
+	public void setSituacaoCadastro(String situacaoCadastro) {
+		this.situacaoCadastro = situacaoCadastro;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public Collection<Endereco> getEnderecos() {
+		return enderecos;
+	}
+	public void setEnderecos(Collection<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
+	public Collection<Dependente> getDependentes() {
+		return dependentes;
+	}
+	public void setDependentes(Collection<Dependente> dependentes) {
+		this.dependentes = dependentes;
+	}
+	public Collection<Vinculo> getVinculos() {
+		return vinculos;
+	}
+	public void setVinculos(Collection<Vinculo> vinculos) {
+		this.vinculos = vinculos;
+	}
+	public Collection<Proposta> getProposta() {
+		return proposta;
+	}
+	public void setProposta(Collection<Proposta> proposta) {
+		this.proposta = proposta;
+	}
+}
+
