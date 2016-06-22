@@ -1,0 +1,12 @@
+package br.unibh.seguros.controle;
+
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.naming.InitialContext;
+import br.unibh.seguros.entidades.Setor;
+import br.unibh.seguros.negocio.ServicoSetor;
+
+public class ConversorSetor {
+
+}

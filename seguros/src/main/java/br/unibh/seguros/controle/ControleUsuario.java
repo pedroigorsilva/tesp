@@ -1,5 +1,6 @@
 package br.unibh.seguros.controle;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
@@ -9,7 +10,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+
+import br.unibh.seguros.entidades.Setor;
 import br.unibh.seguros.entidades.Usuario;
+import br.unibh.seguros.negocio.ServicoSetor;
 import br.unibh.seguros.negocio.ServicoUsuario;
 
 @ManagedBean(name = "usuariomb")
@@ -20,6 +24,10 @@ public class ControleUsuario {
 	
 	@Inject
 	private ServicoUsuario ejb;
+	
+	@Inject
+	private ServicoSetor ejbSetores;
+	
 	private Usuario usuario;
 	private String nomeArg;
 	private List<Usuario> lista;
@@ -116,5 +124,15 @@ public class ControleUsuario {
 		usuario = null;
 		facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exclusão realizada com sucesso!", "");
 		FacesContext.getCurrentInstance().addMessage("messagePanel", facesMsg);
+	}
+	
+	public List<Setor> getSetores() {
+		try {
+			return ejbSetores.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new ArrayList<Setor>();
 	}
 }

@@ -1,5 +1,6 @@
 package br.unibh.seguros.controle;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -115,5 +116,15 @@ public class ControleSetor {
 		setor = null;
 		facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Exclusão realizada com sucesso!", "");
 		FacesContext.getCurrentInstance().addMessage("messagePanel", facesMsg);
+	}
+	
+	public List<Setor> getSetores() {
+		try {
+			return ejb.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new ArrayList<Setor>();
 	}
 }

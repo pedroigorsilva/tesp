@@ -35,6 +35,30 @@ public class Setor implements Serializable{
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		return result;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Setor other = (Setor) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (nome == null) {
+			if (other.nome != null)
+				return false;
+		} else if (!nome.equals(other.nome))
+			return false;
+		return true;
+	}
+
+
 
 	@Version
 	@Column(columnDefinition="bigint NOT NULL DEFAULT 0")
@@ -45,7 +69,7 @@ public class Setor implements Serializable{
 	private Long id;
 	
 	@NotBlank
-	@Pattern(regexp = "[A-zÀ-ú ]*", message="Favor fornecer apenas letras")
+	@Pattern(regexp = "[A-zÀ-ú. ]*", message="Favor fornecer apenas letras")
 	@Size(min=3, max=150)
 	@Column (length=150, nullable=false,unique=true)
 	private String nome;
@@ -54,10 +78,10 @@ public class Setor implements Serializable{
 	private Collection<Setor> setoresInferiores;
 	
 	@JoinColumn (name="setor_superior")
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Setor setorSuperior;
 	
-	@OneToMany(mappedBy ="setor", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy ="setor", fetch=FetchType.EAGER)
 	private Collection<Usuario> mebros;
 	
 	public Long getVersion() {
